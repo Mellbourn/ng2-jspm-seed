@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "outDir": "./temp",
+        "project": "./app",
+        "removeComments": false,
+        "sourceMap": true,
+        "module": "commonjs"
+    }
+}

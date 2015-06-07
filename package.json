@@ -1,0 +1,27 @@
+{
+  "scripts": {
+    "tsc": "./jspm_packages/github/mhegazy/typescript@v1.5-beta2/bin/tsc.js"
+  },
+  "jspm": {
+    "directories": {},
+    "configFile": "jspm.conf.js",
+    "dependencies": {
+      "angular2": "npm:angular2@^2.0.0-alpha.26",
+      "babel": "npm:babel-core@5.4.7",
+      "babel-runtime": "npm:babel-runtime@^5.5.4",
+      "core-js": "npm:core-js@^0.9.14",
+      "es6-shim": "github:es-shims/es6-shim@^0.31.3",
+      "reflect-metadata": "npm:reflect-metadata@^0.1.0"
+    },
+    "devDependencies": {
+      "typescript": "github:mhegazy/typescript@v1.5-beta2"
+    }
+  },
+  "dependencies": {
+    "gulp": "^3.9.0"
+  },
+  "devDependencies": {
+    "gulp-typescript": "^2.7.6",
+    "systemjs-builder": "^0.11.3"
+  }
+}

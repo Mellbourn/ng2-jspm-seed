@@ -4,25 +4,10 @@ var Builder = require('systemjs-builder');
 var Package = require('./package.json');
 var Typescript = require('./jspm_packages/github/mhegazy/typescript@v1.5-beta2/')
 var gulpTs = require('gulp-typescript');
- 
-gulp.task('default', function () {
-  var tsResult = gulp.src('src/**/*.ts')
-    .pipe(ts({
-        noImplicitAny: true,
-        out: 'output.js'
-      }));
-  return tsResult.js.pipe(gulp.dest('built/local'));
-});
 
 var baseConfig = {
-    path: 'app/main',
-    outputFile: 'build/main.js',
-    config: {
-      transpiler: 'babel',
-      paths: {
-      'app/*': 'build/*'
-    }}
-  };
+      transpiler: 'traceur'
+};
 
 
 function getBuilder(config){
@@ -30,6 +15,7 @@ function getBuilder(config){
 }
 
 function configureBuilder(options){
+  console.log(options)
   return function applyConfig(builder){
     builder.config(options);
     return builder;
@@ -43,31 +29,28 @@ function loadConfigFile(filename){
   }
 }
 
-function build(buildTask){
+function build(inputPath, outputFile, outputOptions, buildConfig){
   return getBuilder()
     .then(loadConfigFile(Package.jspm.configFile))
-    .then(configureBuilder(buildTask.config))
+    .then(configureBuilder(buildConfig || baseConfig))
     .then(function(builder){
-      return builder.build(buildTask.path, buildTask.outputFile, buildTask.outputOptions);
+      if(outputOptions.sfx){
+        delete outputOptions.sfx;
+        return builder.buildSFX(inputPath, outputFile, outputOptions);
+      }
+      return builder.build(inputPath, outputFile, outputOptions);
     });
 }
 
-function mergeConfig(config){
-  var c = Object.assign(Object.create(null), baseConfig, config);;
-  return c;
-}
-
 gulp.task('compile:app',function(){
-  return gulp.src(['app/**/*.ts'])
+  return gulp.src(['src/**/*.ts'])
     .pipe(gulpTs({
       typescript: Typescript,
       target: 'es6',
       experimentalDecorators: true,
-      emitDecoratorMetadata: true,
-      noEmitHelpers: true,
-      minify: true
+      emitDecoratorMetadata: true
     }))
-    .js.pipe(gulp.dest('build'));
+    .js.pipe(gulp.dest('app'));
 });
 
 gulp.task('build:all:dev',['compile:app'], function(){
@@ -76,33 +59,67 @@ gulp.task('build:all:dev',['compile:app'], function(){
 
 gulp.task('build:all:min',['compile:app'], function(){
   return build(
-    mergeConfig({
-      outputOptions:{ 
-        minify: true,
-        mangle: true
-    }}));
+    'app/main',
+    'build/app.min.js',
+    {
+      minify: true,
+      inject: true,
+    });
 });
 
-gulp.task('build:lib',['compile:app'], function(){
+gulp.task('build:all:sfx:min',['compile:app'], function(){
   return build(
-    mergeConfig({
-      path: 'app/**/* - [app/**/*]',
-      outputFile: 'build/lib.js',
-      outputOptions:{ 
-        minify: true,
-        mangle: true
-    }}));
+    'app/main',
+    'build/app.min.sfx.js',
+    {
+      minify: true,
+      inject: true,
+      sfx: true
+    });
 });
 
-gulp.task('build:app',['compile:app'], function(){
+gulp.task('build:all:sfx',['compile:app'], function(){
   return build(
-    mergeConfig({
-      outputFile: 'build/app.js',
-      path: 'app/main - app/lib'
-    }));
+    'app/main',
+    'build/app.sfx.js',
+    {
+      inject: false,
+      sfx: true
+    });
 });
 
-gulp.task('build',['build:app']);
-gulp.task('lib',['build:lib']);
+//build dependency bundle
+gulp.task('build:lib',[], function(){
+  return build(
+    'app/**/* - [app/**/*]',
+    'build/lib.js',{});
+  
+});
+
+gulp.task('build:lib:min',['compile:app'], function(){
+  return build(
+    'app/**/* - [app/**/*]',
+    'build/lib.min.js',
+    {
+      minify: true,
+      mangle: true
+    });
+  
+});
+
+gulp.task('build:app',[], function(){
+  return build(
+    'app/main - build/lib',
+    'app/app.js',{});
+});
 
 
+gulp.task('build:app:min',['compile:app'], function(){
+  return build(
+    'app/main - build/lib.min',
+    'app/app.min.js',
+    {
+      minify: true,
+      mangle: true
+    });
+});

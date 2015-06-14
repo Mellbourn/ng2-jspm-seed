@@ -1,25 +1,23 @@
 /// <reference path="../../typings/angular2/angular2.d.ts" />
 import {Component, View, EventEmitter} from 'angular2/angular2';
-
-export class Foo {
-  constructor(){
-    console.log('bar!')
-  }
-  sayHello(name:string = 'dave'){
-    console.log(`hello, {name}`);
-  }
-}
-
+import {Foo} from '../services/Foo';
 
 @Component({
   selector: 'seed-app',
   appInjector: [Foo]
 })
 @View({
-  template: '<h1>hello world</h1>'
+  template: `
+    <h1>hello world</h1>
+  `
 })
 export class SeedApp {
+  package: any;
   constructor(private foo: Foo){
-    console.log('hello world');
+     this.package = {jspm: {}};
+    
+  }
+  toggleDrawer(){
+    
   }
 }

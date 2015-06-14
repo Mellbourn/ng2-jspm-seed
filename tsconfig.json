@@ -1,10 +1,8 @@
 {
     "compilerOptions": {
-        "target": "ES5",
-        "outDir": "./temp",
-        "project": "./app",
+        "target": "ES6",
+        "outDir": "./app",
         "removeComments": false,
-        "sourceMap": true,
-        "module": "commonjs"
+        "sourceMap": true
     }
 }

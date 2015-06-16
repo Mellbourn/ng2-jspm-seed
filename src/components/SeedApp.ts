@@ -1,6 +1,6 @@
 /// <reference path="../../typings/angular2/angular2.d.ts" />
 import {Component, View, EventEmitter} from 'angular2/angular2';
-import {Foo} from '../services/Foo';
+import {Foo} from 'app/services/Foo';
 
 @Component({
   selector: 'seed-app',

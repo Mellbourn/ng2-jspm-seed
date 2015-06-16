@@ -1,10 +1,10 @@
 /// <reference path="../typings/angular2/angular2.d.ts" />
-//import 'zone.js';
-//import 'reflect-metadata';
-//this makes bundle fat :(
+
+//babel polyfill 
+import 'babel/polyfill';
 
 import {bootstrap} from 'angular2/angular2';
-import {SeedApp} from './components/SeedApp';
+import {SeedApp} from 'app/components/SeedApp';
 
 export function run(){
     

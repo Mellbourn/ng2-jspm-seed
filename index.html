@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  
   <head>
     <meta charset="utf-8">
     <title>angular2 jspm</title>
@@ -8,36 +9,37 @@
       console.time('ready');
       console.time('all');
     </script>
-      <!-- SystemJS Loader -->
-      <script src="jspm_packages/npm/zone.js@0.5.1/dist/zone.js"></script>
-      <script src="jspm_packages/npm/reflect-metadata@0.1.0/Reflect.js"></script>
-     <script src="./build/app.min.sfx.js" async></script> 
-      <!-- our generated static dependency bundle -->
-   
-    
-     
+    <!-- deps -->
+    <script src="jspm_packages/npm/zone.js@0.5.1/dist/zone.js" async></script>
+    <script src="jspm_packages/npm/reflect-metadata@0.1.0/Reflect.js" async></script>
+    <!-- SystemJS Loader -->
+    <script src="jspm_packages/system.js"></script>
+    <!-- SystemJS Config -->
+    <script src="jspm.conf.js"></script>
+    <!-- our generated static dependency bundle -->
+    <script src="build/lib.min.js"></script>
   </head>
+  
   <body>
     <!-- our app component -->
-    <seed-app>
-      loading...
-    </seed-app>
- 
-  <script type="text/javascript">
-      console.timeEnd('load');
-     
-        
-    </script>
+    <seed-app>loading...</seed-app>
     
-   <!--<script>
-       var loaded = System.import('app/main');
-      loaded.then(function(m){
+    <script>
+      //use TS for this demo
+      System.config({
+        paths: {
+          'app/*.js' : 'src/*.ts'
+        }
+      })
+      
+      System.import('app/main')
+        .then(function(m){
           m.run();
         })
         .catch(function(err){
           console.log(err);
         });
-    </script>-->
-
+    </script>
   </body>
+
 </html>

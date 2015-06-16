@@ -42,6 +42,7 @@ function build(inputPath, outputFile, outputOptions, buildConfig){
     });
 }
 
+//compiles TS to ES6 
 gulp.task('compile:app',function(){
   return gulp.src(['src/**/*.ts'])
     .pipe(gulpTs({
@@ -52,6 +53,9 @@ gulp.task('compile:app',function(){
     }))
     .js.pipe(gulp.dest('app'));
 });
+
+//OPTION 1
+//builds a single System.register bundle for the entire app + dependencies
 
 gulp.task('build:all:dev',['compile:app'], function(){
   return build(baseConfig);
@@ -66,6 +70,9 @@ gulp.task('build:all:min',['compile:app'], function(){
       inject: true,
     });
 });
+
+//OPTION 2
+//builds a single self-executing bundle for entire app + dependencies
 
 gulp.task('build:all:sfx:min',['compile:app'], function(){
   return build(
@@ -87,6 +94,8 @@ gulp.task('build:all:sfx',['compile:app'], function(){
       sfx: true
     });
 });
+
+//OPTION 3 - builds two System.register bundles, one for dependencies, one for app.
 
 //build dependency bundle
 gulp.task('build:lib',[], function(){
